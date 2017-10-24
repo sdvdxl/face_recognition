@@ -1,6 +1,6 @@
 # This is a sample Dockerfile you can modify to deploy your own app based on face_recognition
 
-FROM python:3.4-slim
+FROM index.tenxcloud.com/tenxcloud/python-runtime
 
 RUN apt-get -y update
 RUN apt-get install -y --fix-missing \
@@ -25,6 +25,7 @@ RUN apt-get install -y --fix-missing \
     python3-numpy \
     software-properties-common \
     zip \
+    zsh \
     && apt-get clean && rm -rf /tmp/* /var/tmp/*
 
 RUN cd ~ && \
@@ -43,9 +44,11 @@ RUN cd ~ && \
 # RUN whatever_command_you_run_to_start_your_app
 
 COPY . /root/face_recognition
+COPY ./pip.conf /root/.pip/
 RUN cd /root/face_recognition && \
     pip3 install -r requirements.txt && \
     python3 setup.py install
 
-CMD cd /root/face_recognition/examples && \
-    python3 recognize_faces_in_pictures.py
+#CMD cd /root/face_recognition/examples && \
+#   python3 recognize_faces_in_pictures.py
+CMD ["/usr/sbin/sshd","-D"]
